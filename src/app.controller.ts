@@ -9,4 +9,9 @@ export class AppController {
   getHello(): string {
     return 'Hello NestJS!';
   }
+
+  @Get('new')
+  newEndpoint(): string {
+    return 'My new endpoint';
+  }
 }
