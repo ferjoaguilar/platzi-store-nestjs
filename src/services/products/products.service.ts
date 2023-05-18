@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { Product } from './../../entities/product.entity';
 
 @Injectable()
@@ -19,7 +19,11 @@ export class ProductsService {
   }
 
   findOne(id: number) {
-    return this.products.find((item) => item.id === id);
+    const product: Product = this.products.find((item) => item.id === id);
+    if (!product) {
+      throw new HttpException(`Product #${id} not found`, HttpStatus.NOT_FOUND);
+    }
+    return product;
   }
 
   create(payload: any) {
