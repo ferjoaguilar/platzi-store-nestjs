@@ -8,45 +8,37 @@ import {
   Param,
   Post,
   Put,
-  Query,
 } from '@nestjs/common';
+
+import { ProductsService } from '../../services/products/products.service';
 
 @Controller('products')
 export class ProductsController {
+  constructor(private productsService: ProductsService) {}
+
+  @Get('')
+  getProducts() {
+    return this.productsService.findAll();
+  }
+
   // New endpoint with params
   @Get(':productId')
   // Custom status code
   @HttpCode(HttpStatus.ACCEPTED)
   getProduct(@Param('productId') productId: string) {
-    return {
-      message: `Product ${productId}`,
-    };
-  }
-
-  // New endpoint with query params
-  @Get('')
-  getProducts(@Query('limit') limit = 100, @Query('offset') offset = 0) {
-    return {
-      message: `Products: limit => ${limit} offset => ${offset}`,
-    };
+    return this.productsService.findOne(+productId);
   }
 
   // Post endpoint
   @Post('')
   create(@Body() payload: any) {
-    return {
-      message: 'Create action',
-      payload,
-    };
+    return this.productsService.create(payload);
   }
 
   // Put endpoint
   @Put(':id')
   update(@Param('id') id: number, @Body() payload: any) {
-    return {
-      id,
-      payload,
-    };
+    return this.productsService.update(id, payload);
   }
 
   // Delete endpoint
