@@ -11,6 +11,7 @@ import {
 } from '@nestjs/common';
 
 import { ProductsService } from '../../services/products/products.service';
+import { ParseIntPipe } from '../../common/parse-int/parse-int.pipe';
 
 @Controller('products')
 export class ProductsController {
@@ -25,8 +26,8 @@ export class ProductsController {
   @Get(':productId')
   // Custom status code
   @HttpCode(HttpStatus.ACCEPTED)
-  getProduct(@Param('productId') productId: string) {
-    return this.productsService.findOne(+productId);
+  getProduct(@Param('productId', ParseIntPipe) productId: number) {
+    return this.productsService.findOne(productId);
   }
 
   // Post endpoint
